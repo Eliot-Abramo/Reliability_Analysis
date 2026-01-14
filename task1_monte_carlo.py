@@ -2,12 +2,6 @@
 Task 1: Monte Carlo Simulation for Reliability Analysis
 =========================================================
 
-OBJECTIVE:
-----------
-Implement Monte Carlo simulation to estimate failure rates considering 
-uncertainty in component parameters. Some parameters follow specific 
-probability distributions rather than fixed values.
-
 RANDOM PARAMETERS SPECIFICATIONS:
 ----------------------------------
 Refer to the comments in the original code for the probability distributions
@@ -55,268 +49,21 @@ import matplotlib.pyplot as plt
 from typing import Dict, List, Tuple
 import reliability_math as rm
 
+class Colors:
+    HEADER = '\033[95m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    INFO = '\033[10m'
 
-# ============================================================================
-# PARAMETER GENERATION FUNCTIONS
-# ============================================================================
-
-def generate_lamb_samples(component_ref: str, n_samples: int = 1) -> np.ndarray:
-    """
-    Generate random samples for LamB parameter based on component reference.
-    
-    Args:
-        component_ref: Component reference (e.g., 'Q5', 'D10', etc.)
-        n_samples: Number of random samples to generate
-    
-    Returns:
-        Array of sampled LamB values
-    
-    TODO: Implement the distribution logic based on component reference
-    Hint: Use np.random.uniform() for uniform distributions
-    """
-    # TODO: Implement this function
-    # Example structure:
-    # if component_ref in ['Q5', 'Q6', 'D3', 'D12', 'D2']:
-    #     return np.random.uniform(5.7, 6.9, n_samples)
-    # elif ...
-    
-    pass  # Replace with your implementation
-
-
-def generate_lam3_samples(component_ref: str, n_samples: int = 1) -> np.ndarray:
-    """
-    Generate random samples for Lam3 parameter based on component reference.
-    
-    Args:
-        component_ref: Component reference (e.g., 'U22', 'U17', etc.)
-        n_samples: Number of random samples to generate
-    
-    Returns:
-        Array of sampled Lam3 values
-    
-    TODO: Implement the distribution logic based on component reference
-    Hint: For 50/50 distributions, use np.random.choice([value1, value2], n_samples)
-    """
-    # TODO: Implement this function
-    pass
-
-
-def generate_vds_samples(component_ref: str, n_samples: int = 1) -> np.ndarray:
-    """
-    Generate random samples for VDS parameter.
-    
-    Args:
-        component_ref: Component reference
-        n_samples: Number of random samples to generate
-    
-    Returns:
-        Array of sampled VDS values
-    
-    TODO: Implement the distribution logic
-    """
-    # TODO: Implement this function
-    pass
-
-
-def generate_vce_samples(component_ref: str, n_samples: int = 1) -> np.ndarray:
-    """
-    Generate random samples for VCE parameter.
-    
-    Args:
-        component_ref: Component reference
-        n_samples: Number of random samples to generate
-    
-    Returns:
-        Array of sampled VCE values
-    
-    TODO: Implement the distribution logic
-    """
-    # TODO: Implement this function
-    pass
-
-
-def generate_operating_power_samples(component_ref: str, n_samples: int = 1) -> np.ndarray:
-    """
-    Generate random samples for Operating Power parameter.
-    
-    Args:
-        component_ref: Component reference
-        n_samples: Number of random samples to generate
-    
-    Returns:
-        Array of sampled operating power values
-    
-    TODO: Implement the distribution logic
-    """
-    # TODO: Implement this function
-    pass
-
-
-# ============================================================================
-# MONTE CARLO SIMULATION
-# ============================================================================
-
-def monte_carlo_component_lambda(component_data: pd.Series, 
-                                n_iterations: int = 10000) -> np.ndarray:
-    """
-    Run Monte Carlo simulation for a single component's failure rate.
-    
-    Args:
-        component_data: Series containing component information from Excel
-        n_iterations: Number of Monte Carlo iterations
-    
-    Returns:
-        Array of failure rate samples
-    
-    TODO: 
-    1. Identify which parameters need random sampling for this component
-    2. Generate n_iterations samples for each random parameter
-    3. Calculate lambda for each iteration using reliability_math functions
-    4. Return array of lambda values
-    
-    Hint: The component class determines which lambda function to use:
-          - 'Integrated Circuit (7)' -> rm.lambda_int()
-          - 'Low power diode (8.2)' -> rm.lambda_diode()
-          - 'Power Transistor (8.5)' -> rm.lambda_transistors()
-          - etc.
-    """
-    # TODO: Implement this function
-    
-    lambda_samples = np.zeros(n_iterations)
-    
-    # Example structure for one component type:
-    # if component_data['Class'] == 'Integrated Circuit (7)':
-    #     # Generate random samples for uncertain parameters
-    #     l3_samples = generate_lam3_samples(component_data['Reference'], n_iterations)
-    #     
-    #     # Calculate lambda for each iteration
-    #     for i in range(n_iterations):
-    #         lambda_samples[i] = rm.lambda_int(
-    #             component_data['Construction Date'],
-    #             component_data['Temperature_Junction'],
-    #             component_data['alpha_s'],
-    #             component_data['alpha_c'],
-    #             rm.NI,
-    #             rm.DT,
-    #             component_data['Table 16'],
-    #             component_data['Table 17a'],
-    #             l3_samples[i]  # Random parameter
-    #         )
-    
-    return lambda_samples
-
-
-def monte_carlo_block_reliability(df: pd.DataFrame, 
-                                  sheet_name: str,
-                                  n_iterations: int = 10000) -> Dict:
-    """
-    Run Monte Carlo simulation for an entire block's reliability.
-    
-    Args:
-        df: DataFrame containing component data
-        sheet_name: Name of the sheet/block to analyze
-        n_iterations: Number of Monte Carlo iterations
-    
-    Returns:
-        Dictionary containing:
-            - 'lambda_samples': Array of total lambda values
-            - 'R_samples': Array of reliability values
-            - 'lambda_mean': Mean lambda
-            - 'lambda_std': Standard deviation of lambda
-            - 'R_mean': Mean reliability
-            - 'R_std': Standard deviation of reliability
-            - 'R_ci_95': 95% confidence interval for reliability
-    
-    TODO:
-    1. Filter dataframe for the specified block
-    2. For each iteration:
-       a. Calculate lambda for each component (with random parameters)
-       b. Sum lambdas (series system assumption)
-       c. Calculate block reliability: R = exp(-lambda_total * t)
-    3. Calculate statistical metrics
-    """
-    # TODO: Implement this function
-    
-    results = {
-        'lambda_samples': None,
-        'R_samples': None,
-        'lambda_mean': None,
-        'lambda_std': None,
-        'R_mean': None,
-        'R_std': None,
-        'R_ci_95': None
-    }
-    
-    return results
-
-
-# ============================================================================
-# VISUALIZATION AND ANALYSIS
-# ============================================================================
-
-def plot_lambda_distribution(lambda_samples: np.ndarray, 
-                            component_name: str,
-                            save_path: str = None):
-    """
-    Plot histogram of lambda distribution from Monte Carlo simulation.
-    
-    Args:
-        lambda_samples: Array of lambda values
-        component_name: Name for plot title
-        save_path: Optional path to save figure
-    
-    TODO: Create informative histogram with mean, std, and confidence intervals
-    """
-    # TODO: Implement this function
-    pass
-
-
-def plot_reliability_distribution(R_samples: np.ndarray,
-                                  block_name: str,
-                                  save_path: str = None):
-    """
-    Plot histogram of reliability distribution.
-    
-    Args:
-        R_samples: Array of reliability values
-        block_name: Name for plot title
-        save_path: Optional path to save figure
-    
-    TODO: Create histogram showing reliability distribution
-    """
-    # TODO: Implement this function
-    pass
-
-
-def plot_convergence(lambda_samples: np.ndarray,
-                    save_path: str = None):
-    """
-    Plot convergence of Monte Carlo simulation (running mean vs iteration).
-    
-    Args:
-        lambda_samples: Array of lambda values in iteration order
-        save_path: Optional path to save figure
-    
-    TODO: Plot running mean to show convergence behavior
-    Hint: Use np.cumsum() to calculate running mean
-    """
-    # TODO: Implement this function
-    pass
-
-
-def compare_deterministic_vs_monte_carlo(deterministic_R: float,
-                                        monte_carlo_results: Dict):
-    """
-    Compare deterministic result with Monte Carlo statistics.
-    
-    Args:
-        deterministic_R: Reliability from deterministic calculation
-        monte_carlo_results: Results dictionary from monte_carlo_block_reliability
-    
-    TODO: Print comparison table and create visualization
-    """
-    # TODO: Implement this function
-    pass
+def print_info(text: str):
+    """Print info message."""
+    print(f"{Colors.BLUE}ℹ {text}{Colors.ENDC}")
 
 
 # ============================================================================
@@ -329,8 +76,18 @@ def run_monte_carlo_analysis(excel_file: str, sheet_name: str):
     This is called in the main.py
     """
 
+    # Load Excel file
+    print_info(f"Loading data from {excel_file}...")
+    df = pd.read_excel(excel_file)
+
+    if 'Sheet' not in df.columns:
+        raise ValueError("Excel file must have a 'Sheet' column")
+
     # TODO: Implement the complete analysis workflow
     
+    # c.f. run_block_reliability() in main.py if you want inspiration for the
+    # automation
+
     print("\nAnalysis complete")
 
 
@@ -343,7 +100,6 @@ if __name__ == "__main__":
     Test your implementation here.
     
     This means you can do a python task1_monte_carlo.py in your terminal to directly test
-    your code in case the main.py implementation is not adapted. Open issues in the git for 
-    these kind of errors.
+    your code in case the main.py implementation is not adapted. 
     """
-    print("If you execute this, open an Issue")
+    print("I love reliability")

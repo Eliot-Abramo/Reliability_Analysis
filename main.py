@@ -12,6 +12,9 @@ from pathlib import Path
 from typing import Optional, Callable
 import traceback
 
+import task1_monte_carlo as mc
+import task2_sensitivity_analysis as sa
+
 # Color codes for terminal output (works on most terminals)
 class Colors:
     HEADER = '\033[95m'
@@ -300,9 +303,8 @@ def display_menu() -> str:
     print(f"{Colors.CYAN}  1. {Colors.ENDC}Calculate Block Reliability (Deterministic)")
     print(f"{Colors.CYAN}  2. {Colors.ENDC}Task 1: Monte Carlo Simulation")
     print(f"{Colors.CYAN}  3. {Colors.ENDC}Task 2: Sensitivity Analysis")
-    print(f"{Colors.CYAN}  4. {Colors.ENDC}Run Both Tasks (Sequential)")
-    print(f"{Colors.CYAN}  5. {Colors.ENDC}Test Environment Setup")
-    print(f"{Colors.CYAN}  6. {Colors.ENDC}Help & Documentation")
+    print(f"{Colors.CYAN}  4. {Colors.ENDC}Test Environment Setup")
+    print(f"{Colors.CYAN}  5. {Colors.ENDC}Help & Documentation")
     print(f"{Colors.CYAN}  0. {Colors.ENDC}Exit")
     
     choice = input(f"\n{Colors.BOLD}Your choice: {Colors.ENDC}").strip()
@@ -584,26 +586,11 @@ def run_task1():
         print_warning("Task cancelled.")
         return
     
-    # Get number of iterations
-    print_info("Enter number of Monte Carlo iterations (recommended: 10000):")
-    while True:
-        try:
-            n_iter = int(input(f"{Colors.BOLD}Iterations: {Colors.ENDC}").strip() or "10000")
-            if n_iter < 100:
-                print_warning("Too few iterations. Recommend at least 1000.")
-                proceed = input(f"{Colors.YELLOW}Proceed anyway? (y/n): {Colors.ENDC}").lower()
-                if proceed != 'y':
-                    continue
-            break
-        except ValueError:
-            print_error("Please enter a valid number.")
-    
     # Execute Task 1
     print_info("Starting Monte Carlo analysis...")
     
     def execute():
-        import task1_monte_carlo as mc
-        mc.run_monte_carlo_analysis(str(excel_file), sheet_name, n_iter)
+        mc.run_monte_carlo_analysis(str(excel_file), sheet_name)
     
     if safe_execute(execute, "Monte Carlo analysis failed"):
         print_success("Task 1 completed successfully!")
@@ -626,57 +613,17 @@ def run_task2():
         print_warning("Task cancelled.")
         return
     
-    # Get variation percentage
-    print_info("Enter parameter variation percentage (default: 10%):")
-    while True:
-        try:
-            var_pct = float(input(f"{Colors.BOLD}Variation %: {Colors.ENDC}").strip() or "10")
-            if var_pct <= 0:
-                print_error("Variation must be positive.")
-                continue
-            if var_pct > 100:
-                print_warning("Large variations may produce unrealistic results.")
-                proceed = input(f"{Colors.YELLOW}Proceed anyway? (y/n): {Colors.ENDC}").lower()
-                if proceed != 'y':
-                    continue
-            break
-        except ValueError:
-            print_error("Please enter a valid number.")
-    
+
     # Execute Task 2
     print_info("Starting sensitivity analysis...")
     
     def execute():
-        import task2_sensitivity_analysis as sa
-        sa.run_sensitivity_analysis(str(excel_file), sheet_name, var_pct)
+        sa.run_sensitivity_analysis(str(excel_file), sheet_name)
     
     if safe_execute(execute, "Sensitivity analysis failed"):
         print_success("Task 2 completed successfully!")
     else:
         print_error("Task 2 failed. Please check the error messages above.")
-
-def run_both_tasks():
-    """Execute both tasks sequentially."""
-    print_header("RUNNING BOTH TASKS")
-    
-    print_info("This will run Task 2 (Sensitivity) followed by Task 1 (Monte Carlo)")
-    proceed = input(f"{Colors.YELLOW}Continue? (y/n): {Colors.ENDC}").lower()
-    
-    if proceed != 'y':
-        print_warning("Cancelled.")
-        return
-    
-    # Run Task 2 first (deterministic baseline)
-    print_info("Step 1/2: Running Sensitivity Analysis...")
-    run_task2()
-    
-    print("\n")
-    
-    # Run Task 1 second (stochastic analysis)
-    print_info("Step 2/2: Running Monte Carlo Simulation...")
-    run_task1()
-    
-    print_success("Both tasks completed!")
 
 def main():
     """Main application loop."""
@@ -706,21 +653,19 @@ def main():
             elif choice == '3':
                 run_task2()
             elif choice == '4':
-                run_both_tasks()
-            elif choice == '5':
                 print("\n")
                 check_environment()
-            elif choice == '6':
+            elif choice == '5':
                 show_help()
             elif choice == '0':
                 print_info("Thank you for using the Reliability Analysis Tool!")
                 print_success("Goodbye!")
                 break
             else:
-                print_error("Invalid choice. Please select 0-6.")
+                print_error("Invalid choice. Please select 0-5.")
             
             # Pause before showing menu again
-            if choice in ['1', '2', '3', '4']:
+            if choice in ['1', '2', '3']:
                 input(f"\n{Colors.BOLD}Press Enter to return to menu...{Colors.ENDC}")
         
         except KeyboardInterrupt:
