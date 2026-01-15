@@ -39,7 +39,12 @@ of each parameter. Key parameters with uncertainty:
 
 YOUR TASKS:
 -----------
-@Louise STP add the math description of what they need to do here
+Vous trouverez si dessous la liste des composantes aléatoires de notre système. Avant de pouvoir passer au calcul de fiabilité, il nous faut calculer 
+les taux de défaillance des différents composants. Pour cela, vous pourrez utiliser les fonctions fournies dans reliability_math. Les valeurs de certains 
+paramètres qu'utilisent ses formules sont données par une norme qui se basent sur des essais laboratoires. Cela donne donc des valeurs qui ne sont pas 
+réellement précises et qui peuvent comp orter un biais. Notre but ici est d'estimer au mieux ces différents paramètres "aléatoires", dont les lois vous sont 
+données si dessus. Estimer ces différents paramètres et calculer les taux de défaillance. 
+-----------
 
 """
 

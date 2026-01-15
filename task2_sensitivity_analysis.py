@@ -3,9 +3,14 @@ Task 2: Sensitivity Analysis for Reliability
 ==============================================
 
 YOUR TASKS:
------------
-@Louise STP add the math description of what they need to do here
-
+-----------indices de Sobol
+Maintenant que les taux de défaillances sont calculés, il nous faut estimer les  de notre fonction de fiabilité. 
+Pour rappel, pour trouver la fonction de fiabilité du système, nous calculons le taux de défaillance global du bloc de composantes 
+(qui n'est autre que la somme de nos lambdas de chacune des ces composantes) puis nous le multiplions par (-t), avec t le temps de 
+la mission en heures, pour en prendre l'exponentielle. Pour avoir la fiabilité totale, nous prenons le produit des fiabilités de chaque 
+bloc. La première étape sera d'écrire la fonction de fiabilité en indiçant les différents lambdas comme les v.a. Ensuite, en utilisant 
+la méthode que vous souhaitez, estimer les indices de sobol et conclure. Des codes dans reliability_math peuvent vous aider à comprendre/à 
+vérifier vos codes. Rappel : la mission dure 5 ans, on pourra prendre t=43800.
 """
 
 import numpy as np
