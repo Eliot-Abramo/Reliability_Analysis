@@ -11,6 +11,8 @@ la mission en heures, pour en prendre l'exponentielle. Pour avoir la fiabilité 
 bloc. La première étape sera d'écrire la fonction de fiabilité en indiçant les différents lambdas comme les v.a. Ensuite, en utilisant 
 la méthode que vous souhaitez, estimer les indices de sobol et conclure. Des codes dans reliability_math peuvent vous aider à comprendre/à 
 vérifier vos codes. Rappel : la mission dure 5 ans, on pourra prendre t=43800.
+
+Pour des raisons de simplicité, calculer les indices de Sobol par bloc, pas sur le système entier.
 """
 
 import numpy as np
